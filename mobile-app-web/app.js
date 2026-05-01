@@ -24,7 +24,26 @@ const countCalls = document.getElementById('count-calls');
 const countBookings = document.getElementById('count-bookings');
 const callOverlay = document.getElementById('call-overlay');
 
-// ── Agent Control ────────────────────────────────────────────────────────────
+const navItems = document.querySelectorAll('.nav-item');
+const screens = document.querySelectorAll('.screen');
+
+// ── Navigation ──────────────────────────────────────────────────────────────
+navItems.forEach((item, index) => {
+    item.addEventListener('click', () => {
+        // Update Nav UI
+        navItems.forEach(nav => nav.classList.remove('active'));
+        item.classList.add('active');
+
+        // Update Screen Visibility
+        const screenIds = ['screen-home', 'screen-leads', 'screen-bookings', 'screen-settings'];
+        screens.forEach(screen => screen.classList.add('hidden'));
+        document.getElementById(screenIds[index]).classList.remove('hidden');
+
+        // Refresh Data if needed
+        if (screenIds[index] === 'screen-leads') fetchAllLeads();
+        if (screenIds[index] === 'screen-bookings') fetchAllBookings();
+    });
+});
 toggleBtn.addEventListener('click', () => {
     isAgentActive = !isAgentActive;
     
@@ -145,4 +164,67 @@ function updateStats(key, inc) {
     countLeads.textContent = stats.leads;
     countCalls.textContent = stats.calls;
     countBookings.textContent = stats.bookings;
+}
+
+// ── Data Fetching ────────────────────────────────────────────────────────────
+async function fetchAllLeads() {
+    const list = document.getElementById('leads-list');
+    list.innerHTML = '<div class="empty-state"><p>Loading leads...</p></div>';
+    
+    try {
+        const res = await fetch(`${CONFIG.BASE_URL}/api/report?teamId=saishivaraju.m2002@gmail.com`, {
+            headers: { 'x-api-secret': CONFIG.API_SECRET }
+        });
+        const data = await res.json();
+        
+        if (data.pipeline && data.pipeline.length > 0) {
+            list.innerHTML = data.pipeline.map(lead => `
+                <div class="activity-item">
+                    <div class="activity-info">
+                        <h4>${lead.name}</h4>
+                        <p>${lead.phone} • ${lead.property_interest || 'General'}</p>
+                    </div>
+                    <div class="activity-time">${lead.stage.toUpperCase()}</div>
+                </div>
+            `).join('');
+            stats.leads = data.pipeline.length;
+            countLeads.textContent = stats.leads;
+        } else {
+            list.innerHTML = '<div class="empty-state"><p>No leads found yet.</p></div>';
+        }
+    } catch (e) {
+        list.innerHTML = '<div class="empty-state"><p>Error loading leads.</p></div>';
+    }
+}
+
+async function fetchAllBookings() {
+    const list = document.getElementById('bookings-list');
+    list.innerHTML = '<div class="empty-state"><p>Loading bookings...</p></div>';
+    
+    try {
+        const res = await fetch(`${CONFIG.BASE_URL}/api/report?teamId=saishivaraju.m2002@gmail.com`, {
+            headers: { 'x-api-secret': CONFIG.API_SECRET }
+        });
+        const data = await res.json();
+        
+        const bookings = data.pipeline.filter(l => l.stage === 'booked' || l.stage === 'visited');
+        
+        if (bookings.length > 0) {
+            list.innerHTML = bookings.map(b => `
+                <div class="activity-item">
+                    <div class="activity-info">
+                        <h4>${b.name}</h4>
+                        <p>${b.property_interest || 'Property Visit'}</p>
+                    </div>
+                    <div class="activity-time">CONFIRMED</div>
+                </div>
+            `).join('');
+            stats.bookings = bookings.length;
+            countBookings.textContent = stats.bookings;
+        } else {
+            list.innerHTML = '<div class="empty-state"><p>No bookings yet.</p></div>';
+        }
+    } catch (e) {
+        list.innerHTML = '<div class="empty-state"><p>Error loading bookings.</p></div>';
+    }
 }

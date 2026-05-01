@@ -25,45 +25,80 @@
             </div>
         </header>
 
-        <!-- Stats Grid -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <span class="stat-label">Leads</span>
-                <span class="stat-value" id="count-leads">0</span>
+        <!-- Screens -->
+        <div id="screen-home" class="screen">
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-label">Leads</span>
+                    <span class="stat-value" id="count-leads">0</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Calls</span>
+                    <span class="stat-value" id="count-calls">0</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Bookings</span>
+                    <span class="stat-value" id="count-bookings">0</span>
+                </div>
             </div>
-            <div class="stat-card">
-                <span class="stat-label">Calls</span>
-                <span class="stat-value" id="count-calls">0</span>
+
+            <!-- Main Action Area -->
+            <div class="action-card">
+                <div class="agent-info">
+                    <div class="agent-avatar">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah&backgroundColor=b8965a" alt="Sarah">
+                    </div>
+                    <div class="agent-details">
+                        <h2>Sarah Al-Rashid</h2>
+                        <p>Ready to handle your leads</p>
+                    </div>
+                </div>
+                <button id="toggle-agent-btn" class="btn-primary">Activate AI Agent</button>
             </div>
-            <div class="stat-card">
-                <span class="stat-label">Bookings</span>
-                <span class="stat-value" id="count-bookings">0</span>
+
+            <!-- Activity Feed -->
+            <div class="section-title">
+                <h3>Live Activity</h3>
+                <span class="view-all">Syncing...</span>
+            </div>
+            
+            <div class="activity-list" id="activity-list">
+                <div class="empty-state">
+                    <p>Activate the agent to start polling for leads.</p>
+                </div>
             </div>
         </div>
 
-        <!-- Main Action Area -->
-        <div class="action-card">
-            <div class="agent-info">
-                <div class="agent-avatar">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah&backgroundColor=b8965a" alt="Sarah">
-                </div>
-                <div class="agent-details">
-                    <h2>Sarah Al-Rashid</h2>
-                    <p>Ready to handle your leads</p>
-                </div>
+        <div id="screen-leads" class="screen hidden">
+            <div class="section-title"><h3>All Leads</h3></div>
+            <div class="list-container" id="leads-list">
+                <div class="empty-state"><p>No leads found yet.</p></div>
             </div>
-            <button id="toggle-agent-btn" class="btn-primary">Activate AI Agent</button>
         </div>
 
-        <!-- Activity Feed -->
-        <div class="section-title">
-            <h3>Live Activity</h3>
-            <span class="view-all">Syncing...</span>
+        <div id="screen-bookings" class="screen hidden">
+            <div class="section-title"><h3>Confirmed Bookings</h3></div>
+            <div class="list-container" id="bookings-list">
+                <div class="empty-state"><p>No bookings yet.</p></div>
+            </div>
         </div>
-        
-        <div class="activity-list" id="activity-list">
-            <div class="empty-state">
-                <p>Activate the agent to start polling for leads.</p>
+
+        <div id="screen-settings" class="screen hidden">
+            <div class="section-title"><h3>Agent Settings</h3></div>
+            <div class="settings-list">
+                <div class="setting-item">
+                    <label>Agent Name</label>
+                    <input type="text" value="Sarah Al-Rashid" readonly>
+                </div>
+                <div class="setting-item">
+                    <label>Server URL</label>
+                    <input type="text" value="https://agent-leads.vercel.app" readonly>
+                </div>
+                <div class="setting-item">
+                    <label>API Secret</label>
+                    <input type="password" value="********" readonly>
+                </div>
             </div>
         </div>
 

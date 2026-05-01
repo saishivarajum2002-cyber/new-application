@@ -234,6 +234,52 @@ header {
     font-weight: 600;
 }
 
+/* Screens */
+.screen {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.list-container {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Settings */
+.settings-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.setting-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.setting-item label {
+    font-size: 12px;
+    color: var(--gold);
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.setting-item input {
+    background: var(--bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 14px;
+    outline: none;
+}
+
 /* Nav */
 .bottom-nav {
     position: fixed;
@@ -246,6 +292,7 @@ header {
     grid-template-columns: repeat(4, 1fr);
     padding: 15px 0 30px;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
+    z-index: 100;
 }
 
 .nav-item {
