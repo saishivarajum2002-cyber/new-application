@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PropEdge AI | Sarah Al-Rashid</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header>
+            <div class="logo-section">
+                <div class="logo-icon">P</div>
+                <div class="logo-text">
+                    <h1>PropEdge</h1>
+                    <p>AI Voice Agent</p>
+                </div>
+            </div>
+            <div class="status-badge" id="agent-status-badge">
+                <span class="pulse"></span>
+                <span id="status-text">OFFLINE</span>
+            </div>
+        </header>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-label">Leads</span>
+                <span class="stat-value" id="count-leads">0</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">Calls</span>
+                <span class="stat-value" id="count-calls">0</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">Bookings</span>
+                <span class="stat-value" id="count-bookings">0</span>
+            </div>
+        </div>
+
+        <!-- Main Action Area -->
+        <div class="action-card">
+            <div class="agent-info">
+                <div class="agent-avatar">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah&backgroundColor=b8965a" alt="Sarah">
+                </div>
+                <div class="agent-details">
+                    <h2>Sarah Al-Rashid</h2>
+                    <p>Ready to handle your leads</p>
+                </div>
+            </div>
+            <button id="toggle-agent-btn" class="btn-primary">Activate AI Agent</button>
+        </div>
+
+        <!-- Activity Feed -->
+        <div class="section-title">
+            <h3>Live Activity</h3>
+            <span class="view-all">Syncing...</span>
+        </div>
+        
+        <div class="activity-list" id="activity-list">
+            <div class="empty-state">
+                <p>Activate the agent to start polling for leads.</p>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="bottom-nav">
+            <div class="nav-item active"><i class="fas fa-home"></i><span>Home</span></div>
+            <div class="nav-item"><i class="fas fa-users"></i><span>Leads</span></div>
+            <div class="nav-item"><i class="fas fa-calendar-check"></i><span>Bookings</span></div>
+            <div class="nav-item"><i class="fas fa-cog"></i><span>Settings</span></div>
+        </nav>
+    </div>
+
+    <!-- Call Overlay -->
+    <div id="call-overlay" class="overlay hidden">
+        <div class="call-content">
+            <div class="caller-id">
+                <p>Calling Lead...</p>
+                <h2 id="lead-name-calling">John Doe</h2>
+                <p id="lead-phone-calling">+91 99999 00000</p>
+            </div>
+            <div class="wave-animation">
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+            </div>
+            <div class="call-status">AI Speaking...</div>
+            <button id="end-call-btn" class="btn-danger">End Call</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
