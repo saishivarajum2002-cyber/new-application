@@ -20,7 +20,7 @@ import {
 import AriaVoiceBridge from './AriaVoiceBridge';
 
 // ── YOUR VERCEL URL ── UPDATE THIS ──────────────
-const BACKEND_URL = 'https://real-estate-web-liard-rho.vercel.app';
+const BACKEND_URL = 'https://new-application-tawny.vercel.app';
 // ────────────────────────────────────────────────
 
 const { width } = Dimensions.get('window');
