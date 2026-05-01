@@ -1,0 +1,40 @@
+{
+  "expo": {
+    "name": "PropEdge AI Agent",
+    "slug": "propedge-agent",
+    "version": "2.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "backgroundColor": "#07080f"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#07080f"
+      },
+      "permissions": [
+        "CALL_PHONE",
+        "RECORD_AUDIO",
+        "READ_PHONE_STATE",
+        "INTERNET"
+      ],
+      "package": "com.propedge.agent"
+    },
+    "ios": {
+      "bundleIdentifier": "com.propedge.agent",
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "Priya needs the mic to listen to leads during calls",
+        "NSSpeechRecognitionUsageDescription": "Priya needs speech recognition to understand leads"
+      }
+    },
+    "plugins": [
+      "@react-native-voice/voice"
+    ],
+    "sdkVersion": "54.0.0",
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    }
+  }
+}

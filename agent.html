@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PropEdge AI Agent</title>
+    <style>
+        :root {
+            --bg: #05070a;
+            --card: #12141a;
+            --accent: #ffcc33;
+            --text: #ffffff;
+            --danger: #ff4d4d;
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            justify-content: space-around;
+            overflow: hidden;
+        }
+
+        .header {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .header h1 {
+            color: var(--accent);
+            font-size: 24px;
+            letter-spacing: 1px;
+        }
+
+        .brain-container {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(255, 204, 51, 0.1) 0%, rgba(5, 7, 10, 1) 70%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .brain-img {
+            width: 120px;
+            height: 120px;
+            transition: transform 0.2s;
+        }
+
+        .brain-img.pulse {
+            animation: pulse 1s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from {
+                transform: scale(1);
+                filter: drop-shadow(0 0 5px var(--accent));
+            }
+
+            to {
+                transform: scale(1.1);
+                filter: drop-shadow(0 0 20px var(--accent));
+            }
+        }
+
+        .status-badge {
+            background: var(--card);
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-weight: 600;
+            border: 1px solid #333;
+            margin: 20px;
+            min-width: 200px;
+            text-align: center;
+        }
+
+        .btn {
+            background: var(--accent);
+            color: #000;
+            padding: 20px 60px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 18px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 204, 51, 0.3);
+            transition: 0.3s;
+        }
+
+        .btn.active {
+            background: var(--danger);
+            color: #fff;
+        }
+
+        .log-box {
+            font-size: 12px;
+            color: #888;
+            height: 40px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>PropEdge Agent</h1>
+    </div>
+
+    <div class="brain-container">
+        <span style="font-size: 80px;" id="brain-icon">💤</span>
+    </div>
+
+    <div id="status" class="status-badge">Aria is Sleeping</div>
+
+    <div id="log" class="log-box">Tap to Wake Up Aria</div>
+
+    <button id="main-btn" class="btn" onclick="toggleAgent()">Activate AI Agent</button>
+
+    <script>
+        let isActive = false;
+        let sessionState = 'INITIAL';
+        let currentLead = null;
+
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.continuous = false;
+        recognition.lang = 'en-US';
+        recognition.interimResults = false;
+
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            updateLog("You said: " + transcript);
+            processAILogic(transcript);
+        };
+
+        recognition.onend = () => {
+            if (isActive) updateLog("Aria is listening...");
+        };
+
+        async function processAILogic(input) {
+            const statusBox = document.getElementById('status');
+            statusBox.innerText = "Aria is thinking...";
+
+            try {
+                const response = await fetch('/api/ai/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ input, state: sessionState, lead: currentLead })
+                });
+                const data = await response.json();
+                sessionState = data.nextState;
+                speak(data.reply);
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function speak(text) {
+            const statusBox = document.getElementById('status');
+            const brainIcon = document.getElementById('brain-icon');
+
+            statusBox.innerText = "Aria is Speaking...";
+            brainIcon.innerText = "🧠";
+            brainIcon.classList.add('pulse');
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.onend = () => {
+                brainIcon.classList.remove('pulse');
+                statusBox.innerText = "Aria is Listening...";
+                try {
+                    recognition.start();
+                } catch (e) { }
+            };
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function toggleAgent() {
+            const btn = document.getElementById('main-btn');
+            const statusBox = document.getElementById('status');
+            const brainIcon = document.getElementById('brain-icon');
+
+            isActive = !isActive;
+
+            if (isActive) {
+                btn.innerText = "Turn Off AI Agent";
+                btn.classList.add('active');
+                statusBox.innerText = "Aria is Live";
+                brainIcon.innerText = "🧠";
+                updateLog("Aria activated. Waiting for lead heartbeat...");
+            } else {
+                btn.innerText = "Activate AI Agent";
+                btn.classList.remove('active');
+                statusBox.innerText = "Aria is Sleeping";
+                brainIcon.innerText = "💤";
+                window.speechSynthesis.cancel();
+                recognition.stop();
+            }
+        }
+
+        function updateLog(msg) {
+            document.getElementById('log').innerText = msg;
+        }
+
+        // 🚀 AUTO-START: If lead info is in the URL (from WhatsApp link)
+        window.onload = () => {
+            const params = new URLSearchParams(window.location.search);
+            const leadName = params.get('name');
+            if (leadName) {
+                currentLead = { name: leadName, phone: params.get('phone') };
+                updateLog("Awaiting your permission to start call with " + leadName);
+                
+                // We show a "Start AI Call" prompt for browser security
+                document.getElementById('status').innerText = "Incoming AI Call...";
+                document.getElementById('main-btn').innerText = "Accept AI Call";
+            }
+        };
+
+        // 📩 THE HEARTBEAT: Checks for new leads every 5 seconds (for the Agent's phone)
+        setInterval(async () => {
+            if (!isActive) return;
+            try {
+                const res = await fetch('/api/mobile/poll-leads');
+                const data = await res.json();
+                if (data && data.lead) {
+                    currentLead = data.lead;
+                    sessionState = 'INITIAL';
+                    updateLog("🔥 HEARTBEAT: New Lead Detected - " + data.lead.name);
+                    processAILogic("");
+                }
+            } catch (e) {
+                console.log("Polling...");
+            }
+        }, 5000);
+    </script>
+</body>
+
+</html>

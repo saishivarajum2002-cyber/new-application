@@ -1,0 +1,37 @@
+{
+  "name": "files",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node api/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saishivarajum2002-cyber/agent-leads.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/saishivarajum2002-cyber/agent-leads-generating-website/issues"
+  },
+  "homepage": "https://github.com/saishivarajum2002-cyber/agent-leads-generating-website#readme",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.10.0",
+    "axios": "^1.6.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.0",
+    "express": "^4.18.2",
+    "googleapis": "^126.0.0",
+    "html2canvas": "^1.4.1",
+    "mongoose": "^8.0.0",
+    "node-fetch": "^2.7.0",
+    "pg": "^8.20.0",
+    "resend": "^3.0.0"
+  },
+  "devDependencies": {
+    "vercel": "^32.0.0"
+  }
+}
