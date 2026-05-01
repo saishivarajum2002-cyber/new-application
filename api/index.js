@@ -960,6 +960,35 @@ app.get('/api/ai/properties', async (req, res) => {
 });
 
 // ──────────────────────────────────────────────────────────────────────────────
+// PENDING LEADS — GET /api/leads/pending
+// Used by the mobile app to poll for leads that need a call.
+// ──────────────────────────────────────────────────────────────────────────────
+app.get('/api/leads/pending', async (req, res) => {
+  try {
+    const { lead } = require('../services/supabase'); // Fallback if no specific teamId
+    // Fetch from MongoDB (active session) or Supabase
+    await connectDB();
+    const snapshot = await DataSnapshot.findOne({ email: AGENT_EMAIL });
+    
+    if (!snapshot || !snapshot.data || !snapshot.data.pe_leads) {
+      return res.json({ success: true, leads: [] });
+    }
+
+    let leads = snapshot.data.pe_leads;
+    if (typeof leads === 'string') {
+      try { leads = JSON.parse(leads); } catch (e) { leads = []; }
+    }
+
+    // Filter for "New" leads that haven't been called yet in the last 15 mins
+    const pending = leads.filter(l => l.status === 'New' || l.stage === 'new').slice(0, 5);
+
+    res.json({ success: true, leads: pending });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ──────────────────────────────────────────────────────────────────────────────
 // LEADS — POST /api/leads
 // ──────────────────────────────────────────────────────────────────────────────
 app.post('/api/leads', async (req, res) => {
