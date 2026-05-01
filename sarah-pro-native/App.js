@@ -6,8 +6,11 @@
 import React, { useState, useEffect } from 'react';
 import { 
   StyleSheet, View, Text, TouchableOpacity, 
-  Image, ScrollView, Linking, Alert 
+  Image, ScrollView, Linking, Alert,
+  NativeModules
 } from 'react-native';
+
+const { DirectCallModule } = NativeModules;
 
 // CONFIG (Update with your Vercel URL)
 const CONFIG = {
@@ -54,8 +57,13 @@ export default function App() {
     const phoneUrl = `tel:${lead.phone}`;
     
     try {
-      // In a real Native App, we use Intent.ACTION_CALL to skip the dialer button
-      await Linking.openURL(phoneUrl); 
+      // THE "SECRET" ACTION: Dials automatically without the dialer button
+      if (DirectCallModule) {
+        DirectCallModule.makeCall(lead.phone);
+      } else {
+        // Fallback for development
+        await Linking.openURL(`tel:${lead.phone}`); 
+      }
       
       // STEP B: WHATSAPP FOLLOW-UP (Triggered after call)
       setTimeout(() => {
