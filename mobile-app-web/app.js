@@ -4,7 +4,7 @@
  */
 
 const CONFIG = {
-    BASE_URL: 'https://agent-leads.vercel.app', // Update this to your deployed URL
+    BASE_URL: 'https://new-application-tawny.vercel.app', // Update this to your deployed URL
     POLL_INTERVAL: 10000, // 10 seconds
     AGENT_NAME: 'Sarah',
     API_SECRET: 'propedge_secret_2026'
