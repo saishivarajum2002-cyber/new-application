@@ -4,21 +4,16 @@
     "slug": "propedge-agent",
     "version": "2.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
     "splash": {
       "backgroundColor": "#07080f"
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#07080f"
-      },
       "permissions": [
-        "CALL_PHONE",
-        "RECORD_AUDIO",
-        "READ_PHONE_STATE",
-        "INTERNET"
+        "android.permission.CALL_PHONE",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.READ_PHONE_STATE",
+        "android.permission.INTERNET"
       ],
       "package": "com.propedge.agent"
     },
@@ -32,9 +27,14 @@
     "plugins": [
       "@react-native-voice/voice"
     ],
-    "sdkVersion": "54.0.0",
+    "sdkVersion": "51.0.0",
     "runtimeVersion": {
       "policy": "sdkVersion"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "cccb65dc-47cd-4cbf-98e8-d7ee2d0c0d09"
+      }
     }
   }
 }
